@@ -10,7 +10,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { HttpInterceptorModule } from "ng-http-interceptor";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { DbProvider } from '../providers/db/db';
+import { Db } from '../providers/db/db';
+import { SQLite } from "@ionic-native/sqlite";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { DbProvider } from '../providers/db/db';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    DbProvider
+    SQLite,
+    Db
   ]
 })
 export class AppModule {}
