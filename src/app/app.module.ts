@@ -1,7 +1,7 @@
 import { LoginPageModule } from './../pages/login/login.module';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -12,6 +12,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Db } from '../providers/db/db';
 import { SQLite } from "@ionic-native/sqlite";
+import { MroErrorHandler } from "./mro-error-handler";
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { SQLite } from "@ionic-native/sqlite";
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: ErrorHandler, useClass: MroErrorHandler},
     SQLite,
     Db
   ]
