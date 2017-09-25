@@ -1,3 +1,4 @@
+import { MroApiProvider } from './../providers/api/api';
 import { LoginPageModule } from './../pages/login/login.module';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -41,7 +42,8 @@ import { MroErrorHandler } from "./mro-error-handler";
     SplashScreen,
     {provide: ErrorHandler, useClass: MroErrorHandler},
     SQLite,
-    Db
+    Db,
+    MroApiProvider
   ]
 })
 export class AppModule {}
