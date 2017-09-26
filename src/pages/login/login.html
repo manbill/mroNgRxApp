@@ -19,6 +19,6 @@
       <ion-label>密码:</ion-label>
       <ion-input type="text" formControlName='password'></ion-input>
     </ion-item>
-    <button ion-button [disabled]='loginForm.invalid' full>登录</button>
+    <button ion-button [disabled]='loginForm.invalid' full (click)='login()'>登录</button>
   </form>
 </ion-content>

@@ -32,4 +32,12 @@ export class MroError {
   errorCode: number;
   errorMessage: string;
   errorReason: any;
+  constructor(mro: MroError) {
+    this.errorCode = mro.errorCode;
+    this.errorMessage = mro.errorMessage;
+    this.errorReason = mro.errorReason;
+  }
+}
+export enum MroErrorCode{
+  response_error_code
 }

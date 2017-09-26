@@ -1,24 +1,20 @@
 import * as UserActions from "../actions/user.actions";
 import * as fromLogin from "../../pages/login/reducer/login.reducer";
-import { createFeatureSelector, createSelector } from "@ngrx/store";
+import * as fromProject from "../projects/reducer/project.reducer";
+import { createFeatureSelector, createSelector, ActionReducerMap } from "@ngrx/store";
 export interface UserState {
-    login: fromLogin.LoginState;
+  login: fromLogin.LoginState;
+  project: fromProject.ProjectState
 }
 export const initState: UserState = {
-    login: fromLogin.initState
+  login: fromLogin.initState,
+  project: fromProject.inintState
 }
-export function reducer(state: UserState = initState, action: UserActions.Actions): UserState {
-    switch (action.type) {
-        default:
-            return state;
-        case UserActions.INIT_USER_STATE: {
-            return {
-                ...state,
-                login: getLoginState((<UserActions.InitUser>action).payload)
-            }
-        }
-    }
+export const reducer: ActionReducerMap<UserState> = {
+  login: fromLogin.reducer,
+  project: fromProject.reducer
 }
+
 export const getLoginState = createFeatureSelector<fromLogin.LoginState>('login');
-export const getLoggedIn=createSelector(getLoginState,fromLogin.getLoggedIn);
-export const getLoginUser=createSelector(getLoginState,fromLogin.getLoginUser);
+export const getLoggedIn = createSelector(getLoginState, fromLogin.getLoggedIn);
+export const getLoginUser = createSelector(getLoginState, fromLogin.getLoginUser);
