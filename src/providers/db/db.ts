@@ -127,16 +127,16 @@ export class Db {
   initSqlVersions() {
     const checksql = `SELECT * FROM sqlite_master where type='table' and name='eam_sql_version'`;
     return this.executeSql(checksql)
-      .switchMap(res => {
+      .switchMap((res) => {
         console.debug(res);
         let sqls = [];
         const lastestSqlVersion = SqlVersions[SqlVersions.length - 1].sqlVersion;
         const updateSqlver = `update  ${tableNames.eam_sql_version} set sqlVersion=?`;
         const inserSqlver = `insert into  ${tableNames.eam_sql_version} (sqlVersion) values(?)`;
-        if (res.rows.length > 0) {
+        if (res['rows'].length > 0) {
           return this.executeSql(`select * from ${tableNames.eam_sql_version}`)
             .map(res => {
-              let lastSqlVer = res.rows.item(0)['sqlVersion'];
+              let lastSqlVer = res['rows'].item(0)['sqlVersion'];
               console.debug("上一版sqlVersion:", lastSqlVer, `当前版本：${lastestSqlVersion}`);
               sqls = SqlVersions
                 .filter(sqlVer => sqlVer.sqlVersion > +lastSqlVer)

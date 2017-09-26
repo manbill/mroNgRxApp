@@ -1,6 +1,6 @@
 import * as UserActions from "../actions/user.actions";
 import * as fromLogin from "../../pages/login/reducer/login.reducer";
-import { createFeatureSelector } from "@ngrx/store";
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 export interface UserState {
     login: fromLogin.LoginState;
 }
@@ -20,3 +20,5 @@ export function reducer(state: UserState = initState, action: UserActions.Action
     }
 }
 export const getLoginState = createFeatureSelector<fromLogin.LoginState>('login');
+export const getLoggedIn=createSelector(getLoginState,fromLogin.getLoggedIn);
+export const getLoginUser=createSelector(getLoginState,fromLogin.getLoginUser);

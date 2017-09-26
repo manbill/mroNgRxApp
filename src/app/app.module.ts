@@ -20,6 +20,9 @@ import { Http } from '@angular/http';
 import { AppState, RootReducers, metaReducers, isDebug } from './reducers/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { HttpProvider } from '../providers/mro-http-interceptor/http-interceptor';
+import { EffectsModule } from "@ngrx/effects";
+import { AppEffects } from './effects/app.effects';
+import { MroComponentsModule } from '../components/components.module';
 @NgModule({
     declarations: [
         MyApp,
@@ -36,7 +39,9 @@ import { HttpProvider } from '../providers/mro-http-interceptor/http-interceptor
         ReactiveFormsModule,
         StoreModule.forRoot(RootReducers, { metaReducers }),
         // Note that you must instrument after importing StoreModule
-        isDebug ? StoreDevtoolsModule.instrument() : []
+        isDebug ? StoreDevtoolsModule.instrument() : [],
+        EffectsModule.forRoot([AppEffects]),
+        MroComponentsModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -51,8 +56,9 @@ import { HttpProvider } from '../providers/mro-http-interceptor/http-interceptor
         SplashScreen,
         { provide: ErrorHandler, useClass: MroErrorHandler },
         MroApiProvider,
+        SQLite,
         DbProvider,
-        HttpProvider
+        HttpProvider,
     ]
 })
 export class AppModule { }

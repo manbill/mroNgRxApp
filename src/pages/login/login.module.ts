@@ -11,6 +11,9 @@ import { LoginPage } from './login';
   ],
   providers:[
 
+  ],
+  entryComponents:[
+    LoginPage,
   ]
 })
 export class LoginPageModule {}
