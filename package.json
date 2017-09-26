@@ -40,6 +40,7 @@
     "ionicons": "3.0.0",
     "ng-http-interceptor": "^3.1.2",
     "ramda": "^0.24.1",
+    "redux-devtools-extension": "^2.13.2",
     "rxjs": "5.4.0",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.12"

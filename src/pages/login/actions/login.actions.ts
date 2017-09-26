@@ -21,5 +21,5 @@ export class LoginFailure implements Action {
   readonly type = LOGIN_FAILURE;
   constructor(public payload: any) { }
 }
-export type LoginActions =
+export type Actions =
   Login | LoginFailure | LoginSuccess | Logout;

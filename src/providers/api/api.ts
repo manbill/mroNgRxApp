@@ -27,7 +27,7 @@ export interface MroApiEntities {
 }
 @Injectable()
 export class MroApiProvider {
-  mroApiEntities: MroApiEntities = {
+  apiEntities: MroApiEntities = {
     loginApi: Apis.Api_login,
     logoutApi: Apis.Api_logout,
     fetchCompaniesApi: "todo",

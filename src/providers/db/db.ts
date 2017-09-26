@@ -23,7 +23,7 @@ const dbConfig: SQLiteDatabaseConfig = {
 }
 @Injectable()
 export class Db {
-  constructor( @Inject(SQLite) private sqlite: SQLite) {
+  constructor(private sqlite: SQLite) {
     // console.log('Hello DbOperationProvider Provider', sqlite);
   }
   executeSql(sql: string, params?: any) {
@@ -72,10 +72,10 @@ export class Db {
       let records = sqlStatements.slice(0);
       const db = window['openDatabase'](dbConfig.name, "", "", 1024 * 1024 * 100, console.log);
       return new Observable(observer => {
-        if(records.length===0){
+        if (records.length === 0) {
           observer.next();
           observer.complete();
-          return ;
+          return;
         }
         db.transaction((tx) => {
           (function insertOne() {
@@ -137,28 +137,33 @@ export class Db {
           return this.executeSql(`select * from ${tableNames.eam_sql_version}`)
             .map(res => {
               let lastSqlVer = res.rows.item(0)['sqlVersion'];
-              console.debug("上一版sqlVersion:", lastSqlVer,`当前版本：${lastestSqlVersion}`);
+              console.debug("上一版sqlVersion:", lastSqlVer, `当前版本：${lastestSqlVersion}`);
               sqls = SqlVersions
                 .filter(sqlVer => sqlVer.sqlVersion > +lastSqlVer)
                 .reduce((sqls, sqlVer) => sqls.concat(sqlVer.sqlStatements
                   .filter(sql => sql && sql !== '')
                 ), []);
-                if(+lastSqlVer!==+lastestSqlVersion){
-                  sqls.push([updateSqlver,[lastestSqlVersion]]);
-                }
+              if (+lastSqlVer !== +lastestSqlVersion) {
+                sqls.push([updateSqlver, [lastestSqlVersion]]);
+              }
               return sqls;
             })
-            .do(()=>console.log('数据库版本变更',sqls))
+            .do(() => console.log('数据库版本变更', sqls))
             .switchMap((sqls) => this.sqlBatch(sqls));
         } else {
           sqls = SqlVersions
             .reduce((sqls, sqlVer) => sqls.concat(sqlVer.sqlStatements
               .filter(sql => sql && sql !== '')
             ), []);
-            sqls.push([inserSqlver,[lastestSqlVersion]]);
+          sqls.push([inserSqlver, [lastestSqlVersion]]);
           return this.sqlBatch(sqls)
         }
       });
 
   }
+}
+export const DbProvider: Provider = {
+  provide: Db,
+  useFactory: (sqlite: SQLite) => new Db(sqlite),
+  deps: [SQLite]
 }

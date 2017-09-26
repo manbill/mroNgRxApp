@@ -1,4 +1,5 @@
-import { ManualInstructor } from './../../base-data/manual-instructor/instructor.modal';
+import { ManualInstructor } from '../instructor/instructor.modal';
+
 export interface BaseOrderList {
   hasMoreData?: boolean;
   refreshCompleted?: boolean;

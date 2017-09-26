@@ -1,7 +1,8 @@
 import { IonicErrorHandler, AlertController } from "ionic-angular";
+import { Inject } from '@angular/core';
 
 export class MroErrorHandler extends IonicErrorHandler {
-  constructor(private alertCtrl: AlertController) { super() }
+  constructor( @Inject(AlertController) private alertCtrl: AlertController) { super() }
   handleError(errors: MroError[]) {
     if (errors.length > 0) {
       const alter = this.alertCtrl.create({
