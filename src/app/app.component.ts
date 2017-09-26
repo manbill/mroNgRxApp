@@ -21,14 +21,15 @@ export class MyApp {
   @ViewChild('nav') nav: NavController;
   login$: Observable<boolean>;
   user$: Observable<fromUser.UserState>;
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private store: Store<fromUser.UserState>) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private store: Store<fromRoot.AppState>) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      this.nav.setRoot(LoginPage);
       this.login$ = this.store.select(fromUser.getLoggedIn);
-      console.log(this.store);
+      // console.log(this.store);
       const subscription = this.login$.subscribe(loggedIn => {
         console.log(loggedIn);
         if (!loggedIn) {
