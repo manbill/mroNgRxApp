@@ -1,3 +1,4 @@
+import { MaterialModule } from './materials/material.module';
 import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { reducers } from "./base-reducer/base.reducer";
@@ -7,7 +8,8 @@ import { DictionaryModule } from './dictionary/dictionary.module';
   imports: [
     StoreModule.forFeature('baseData', reducers),
     IntructorModule,
-    DictionaryModule
+    DictionaryModule,
+    MaterialModule
   ]
 })
 export class BaseDataModule {
