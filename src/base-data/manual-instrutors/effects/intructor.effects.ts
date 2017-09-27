@@ -100,7 +100,11 @@ export class InstructorEffects {
             .switchMap(() => {
               return this.db.executeSql(`select * from ${tableNames.eam_sync_manual_instructor} limit 0,${LOAD_PAGENATION}`)
             })
-            .map(res => MroUtils.changeDbResult2Array(res))
+            .map(res => {
+              const results = MroUtils.changeDbResult2Array(res);
+              return results.map(r => JSON.parse(r['manualInstructorJson']));
+            })
+            .do(r => console.log('数据库拉取的指导书数据：', r))
             .map((instructors: ManualInstructor[]) => new InstructorActions.FetchInstructorDataSuccess(instructors))
         })
         .catch(e => {
