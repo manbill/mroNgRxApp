@@ -75,6 +75,7 @@ export class DictionaryEffects {
           return this.db.executeSql(`select * from ${tableNames.eam_sync_dictionary_detail}`)
             .map(res => MroUtils.changeDbResult2Array(res) as Dictionary[])
         }, (r, records) => ({ r, records }))
+        // .do(({records})=>console.log('数据库拉取回来的字典数据：',records))
         .map(({ records }) => new DictionaryActions.FetchDictionaryDataSuccess(records))
         .catch(e => {
           console.error(e);
