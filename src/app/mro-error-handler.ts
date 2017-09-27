@@ -40,5 +40,6 @@ export class MroError {
 }
 export enum MroErrorCode{
   response_error_code,
-  instructor_error_code
+  instructor_error_code,
+  dictionary_error_code,
 }

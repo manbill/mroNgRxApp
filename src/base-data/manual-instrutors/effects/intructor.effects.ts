@@ -77,15 +77,17 @@ export class InstructorEffects {
                   return res;
                 });
             })
+            .filter(r => MroUtils.isNotEmpty(r['manualInfoDTO']))
             .bufferCount(bufferCount)
+            .do((r) => console.log('after buffering ', r))
             .mergeMap((instructors: ManualInstructor[]) => {
               const sqls = [];
               const insertSql = `insert into ${tableNames.eam_sync_manual_instructor}(manualId,manualInstructorJson)values(?,?)`;
               sqls.push(`delete from ${tableNames.eam_sync_manual_instructor} where manualId in (${instructors.map(i => i.manualInfoDTO.manualId)})`);
               instructors.forEach(instructor => {
                 const values = [];
-                values.push(instructor['manualId']);
-                values.push(JSON.stringify(instructor.manualInfoDTO.manualId));
+                values.push(instructor.manualInfoDTO.manualId);
+                values.push(JSON.stringify(instructor));
                 sqls.push([insertSql, values]);
               });
               return this.db.sqlBatch(sqls);
@@ -94,12 +96,13 @@ export class InstructorEffects {
             .switchMap(() => {
               return this.db.executeSql(`update ${tableNames.eam_sync_actions} set lastSyncSuccessTime=?,syncStatus=?  where syncAction=?`, [curServerTime, 1, InstructorActions.FETCH_INSTRUCTOR_DATA])
             })
+            .do(() => console.log('完成指导书下载'))
             .switchMap(() => {
               return this.db.executeSql(`select * from ${tableNames.eam_sync_manual_instructor} limit 0,${LOAD_PAGENATION}`)
             })
             .map(res => MroUtils.changeDbResult2Array(res))
+            .map((instructors: ManualInstructor[]) => new InstructorActions.FetchInstructorDataSuccess(instructors))
         })
-        .map((instructors: ManualInstructor[]) => new InstructorActions.FetchInstructorDataSuccess(instructors))
         .catch(e => {
           console.error(e);
           const err = new MroError({ errorCode: MroErrorCode.instructor_error_code, errorMessage: '获取指导书失败', errorReason: JSON.stringify(e) });

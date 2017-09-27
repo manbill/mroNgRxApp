@@ -23,6 +23,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from "@ngrx/effects";
 import { AppEffects } from './effects/app.effects';
 import { MroComponentsModule } from '../components/components.module';
+import { BaseDataModule } from '../base-data/base-data.module';
 @NgModule({
   declarations: [
     MyApp,
@@ -37,12 +38,13 @@ import { MroComponentsModule } from '../components/components.module';
     HttpInterceptorModule,
     LoginPageModule,
     ReactiveFormsModule,
-    StoreModule.forRoot(RootReducers,{metaReducers}),
+    StoreModule.forRoot(RootReducers, { metaReducers }),
     // Note that you must instrument after importing StoreModule
     isDebug ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects]),
     UserModule,
-    MroComponentsModule
+    MroComponentsModule,
+    BaseDataModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -23,7 +23,7 @@ export class AppEffects {
           .map(res => MroUtils.changeDbResult2Array(res))
       })
       .switchMap((records) => {
-        const syncActions = BaseDataActions.BaseDataFetchActions.concat(BusinessDataActions.BusinessDataFetchActions);
+        const syncActions = BaseDataActions.BaseDataFetchActions.concat(BusinessDataActions.BusinessDataFetchActions).filter(a => MroUtils.isNotEmpty(a.syncAction));
         const sqls = [];
         syncActions.filter(a => {
           return !records.some((r => r['syncAction'] === a.syncAction))

@@ -6,12 +6,17 @@ export interface DictionaryState {
   }
   pending: boolean;
 }
-export function reducer(state: DictionaryState, action: any): DictionaryState {
+export const initState: DictionaryState = {
+  ids: [],
+  entitites: {},
+  pending: false
+}
+export function reducer(state: DictionaryState = initState, action: any): DictionaryState {
   switch (action.type) {
     default:
       return state;
   }
 }
-export const getDictionaryIds=(state:DictionaryState)=>state.ids;
-export const getDictionaryentitites=(state:DictionaryState)=>state.entitites;
-export const getDictionaryPendingStatus=(state:DictionaryState)=>state.pending;
+export const getDictionaryIds = (state: DictionaryState) => state.ids;
+export const getDictionaryentitites = (state: DictionaryState) => state.entitites;
+export const getDictionaryPendingStatus = (state: DictionaryState) => state.pending;

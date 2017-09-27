@@ -1,3 +1,4 @@
+import * as R from "ramda";
 export class MroUtils {
   static changeDbResult2Array(res) {
     const results = [];
@@ -7,5 +8,8 @@ export class MroUtils {
       }
     }
     return results;
+  };
+  static isNotEmpty(val) {
+    return !R.isNil(val) && !R.isEmpty(val);
   }
 }
