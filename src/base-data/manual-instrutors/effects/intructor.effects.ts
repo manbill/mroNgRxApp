@@ -13,12 +13,21 @@ import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/observable/range';
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/observable/timer';
-
+import 'rxjs/add/operator/pluck';
+import 'rxjs/add/operator/bufferCount';
+import 'rxjs/add/operator/filter';
+import { ManualInstructor } from '../../../modals/instructor/instructor.modal';
+import 'rxjs/add/operator/takeLast';
+import * as AppActions from "../../../app/actions/app.actions";
+import { MroError, MroErrorCode } from '../../../app/mro-error-handler';
+import { LOAD_PAGENATION } from '../../../shared/common';
+import { LOGIN_SUCCESS } from '../../../pages/login/actions/login.actions';
+import * as moment from "moment/moment";
 @Injectable()
 export class InstructorEffects {
   constructor(private action$: Actions, private httpApi: MroHttpWithApis, private db: Db) { }
   @Effect()
-  fetchInstructors$ = this.action$.ofType(InstructorActions.FETCH_INSTRUCTOR_DATA)
+  fetchInstructors$ = this.action$.ofType(InstructorActions.FETCH_INSTRUCTOR_DATA, LOGIN_SUCCESS)
     .switchMap(() => {
       return this.db.executeSql(`select * from ${tableNames.eam_sync_actions} where syncAction=?`, [InstructorActions.FETCH_INSTRUCTOR_DATA])
         .map(res => MroUtils.changeDbResult2Array(res))
@@ -36,25 +45,65 @@ export class InstructorEffects {
         .switchMap(({ lastSyncTime, curServerTime }) => {
           const params = {
             page: 0,
-            startDate: '',
-            endDate: ''
+            startDate: moment(lastSyncTime).format('YYYY-MM-DD HH:mm:ss'),
+            endDate: moment(curServerTime).format("YYYY-MM-DD HH:mm:ss")
           }
           const repeat$ = new Subject();
           const maxRetryCount = 3;
+          const retryInterval = 2000;
+          const bufferCount = 10;
           return Observable.empty().startWith('fetchManualInstructors')
             .switchMap(() => {
               return this.httpApi.http.post(this.httpApi.apis.fetchManualInstrutorApi, params)
                 .retryWhen(err$ => Observable.range(0, maxRetryCount)
-                  .zip(err$,(i,err)=>({i,err}))
-                  .mergeMap(({i,err})=>{
-                    if(i===maxRetryCount-1){
+                  .zip(err$, (i, err) => ({ i, err }))
+                  .mergeMap(({ i, err }) => {
+                    if (i === maxRetryCount - 1) {
                       return Observable.throw(err);
                     }
-                    return Observable.timer(i*)
+                    return Observable.timer(i * retryInterval);
                   })
                 )
                 .repeatWhen(() => repeat$.asObservable())
+                .pluck('data', 'dataObject')
+                .do((res) => console.log('指导书:', res))
+                .map(res => {
+                  if (res['manualInfoDTO']) {
+                    params.page++;
+                    setTimeout(() => repeat$.next(), 0);
+                  } else {
+                    setTimeout(() => repeat$.complete(), 0);
+                  }
+                  return res;
+                });
             })
+            .bufferCount(bufferCount)
+            .mergeMap((instructors: ManualInstructor[]) => {
+              const sqls = [];
+              const insertSql = `insert into ${tableNames.eam_sync_manual_instructor}(manualId,manualInstructorJson)values(?,?)`;
+              sqls.push(`delete from ${tableNames.eam_sync_manual_instructor} where manualId in (${instructors.map(i => i.manualInfoDTO.manualId)})`);
+              instructors.forEach(instructor => {
+                const values = [];
+                values.push(instructor['manualId']);
+                values.push(JSON.stringify(instructor.manualInfoDTO.manualId));
+                sqls.push([insertSql, values]);
+              });
+              return this.db.sqlBatch(sqls);
+            })
+            .takeLast(1)
+            .switchMap(() => {
+              return this.db.executeSql(`update ${tableNames.eam_sync_actions} set lastSyncSuccessTime=?,syncStatus=?  where syncAction=?`, [curServerTime, 1, InstructorActions.FETCH_INSTRUCTOR_DATA])
+            })
+            .switchMap(() => {
+              return this.db.executeSql(`select * from ${tableNames.eam_sync_manual_instructor} limit 0,${LOAD_PAGENATION}`)
+            })
+            .map(res => MroUtils.changeDbResult2Array(res))
+        })
+        .map((instructors: ManualInstructor[]) => new InstructorActions.FetchInstructorDataSuccess(instructors))
+        .catch(e => {
+          console.error(e);
+          const err = new MroError({ errorCode: MroErrorCode.instructor_error_code, errorMessage: '获取指导书失败', errorReason: JSON.stringify(e) });
+          return Observable.of(new AppActions.AppThrowsError(err));
         })
     })
   // const params = {
