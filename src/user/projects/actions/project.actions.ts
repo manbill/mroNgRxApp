@@ -1,9 +1,9 @@
 import { Project } from './../../../modals/project/project.modal';
 import { MroError } from './../../../app/mro-error-handler';
 import { Action } from '@ngrx/store';
-export const FETCH_USER_PROJECTS = '[Project] fetch_user_projects'
-export const FETCH_USER_PROJECTS_SUCCESS = '[Project] fetch_user_projects_success'
-export const FETCH_USER_PROJECTS_FAILED = '[Project] fetch_user_projects_failed'
+export const FETCH_USER_PROJECTS = '[Project] fetch_user_projects';
+export const FETCH_USER_PROJECTS_SUCCESS = '[Project] fetch_user_projects_success';
+export const FETCH_USER_PROJECTS_FAILED = '[Project] fetch_user_projects_failed';
 export class FetchProjects implements Action {
   readonly type = FETCH_USER_PROJECTS;
   constructor(public payload?: any) { };

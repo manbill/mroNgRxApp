@@ -18,7 +18,7 @@ import { SQLite } from "@ionic-native/sqlite";
 import { MroErrorHandler } from "./mro-error-handler";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
-import { isDebug } from './reducers/app.reducer';
+import { isDebug, RootReducers, metaReducers } from './reducers/app.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from "@ngrx/effects";
 import { AppEffects } from './effects/app.effects';
@@ -37,10 +37,11 @@ import { MroComponentsModule } from '../components/components.module';
     HttpInterceptorModule,
     LoginPageModule,
     ReactiveFormsModule,
-    UserModule,
+    StoreModule.forRoot(RootReducers,{metaReducers}),
     // Note that you must instrument after importing StoreModule
     isDebug ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects]),
+    UserModule,
     MroComponentsModule
   ],
   bootstrap: [IonicApp],

@@ -12,8 +12,7 @@ import { reducer } from "./reducer/login.reducer";
   ],
   imports: [
     IonicPageModule.forChild(LoginPage),
-    EffectsModule.forFeature([LoginEffects]),
-    StoreModule.forFeature('login',reducer)
+    EffectsModule.forFeature([LoginEffects])
   ],
   providers:[
 

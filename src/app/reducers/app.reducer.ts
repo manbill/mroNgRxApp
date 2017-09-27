@@ -12,15 +12,15 @@ export interface AppErrorState {
   }
 }
 export interface AppState {
-  user: fromUser.UserState;
   appErrors: AppErrorState;
 }
-export const getUserFeatureState = createFeatureSelector<fromUser.UserState>('user');
 export const RootReducers: ActionReducerMap<AppState> = {
-  user: fromUser.reducer,
   appErrors: appErrorsReducer
 }
-export function appErrorsReducer(state: AppErrorState, action: AppActions.Actions): AppErrorState {
+export function appErrorsReducer(state: AppErrorState = {
+  errorCodes: [],
+  errors: {}
+}, action: AppActions.Actions): AppErrorState {
   switch (action.type) {
     default:
       return state;
@@ -42,5 +42,3 @@ export function mroLogger(reducer: ActionReducer<AppState>): ActionReducer<AppSt
   }
 }
 export const metaReducers: MetaReducer<AppState>[] = isDebug ? [mroLogger, storeFreeze] : [];
-export const getLoggedIn = createSelector(getUserFeatureState, fromUser.getLoggedIn);
-export const getLoginUser = createSelector(getUserFeatureState, fromUser.getLoginUser);

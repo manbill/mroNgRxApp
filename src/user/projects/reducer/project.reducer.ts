@@ -1,5 +1,6 @@
 import { Project } from './../../../modals/project/project.modal';
 import * as ProjectActions from "../actions/project.actions";
+import { createSelector } from '@ngrx/store';
 export interface ProjectState {
   selectedProjectId: number;
   ids: number[];
@@ -41,3 +42,8 @@ export function reducer(state: ProjectState = inintState, action: ProjectActions
     }
   }
 }
+export const getSelectedProjectId=(state:ProjectState)=>state.selectedProjectId;
+export const getProjectPendingStatus=(s:ProjectState)=>s.pending;
+export const getProjectIds=(s:ProjectState)=>s.ids;
+export const getProjectEntities=(s:ProjectState)=>s.entities;
+export const getProjects=createSelector(getProjectIds,getProjectEntities,(ids,entitites)=>ids.map(id=>entitites[id]));

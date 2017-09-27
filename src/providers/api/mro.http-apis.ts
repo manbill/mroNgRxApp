@@ -3,11 +3,12 @@ import { AppState } from './../../app/reducers/app.reducer';
 import { MroError, MroErrorCode } from './../../app/mro-error-handler';
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
-import { HttpInterceptorService } from 'ng-http-interceptor';
+import { HttpInterceptorService, getHttpHeadersOrInit } from 'ng-http-interceptor';
 import { Injectable, Provider } from '@angular/core';
 import 'rxjs/add/operator/map';
 import * as Apis from "./api-urls";
 import * as LoginActions from "../../pages/login/actions/login.actions";
+import * as fromUser from "../../user/reducer/user.reducer";
 /*
   Generated class for the MroApiProvider provider.
 
@@ -53,11 +54,11 @@ export class MroHttpWithApis {
   constructor(httpInterceptor: HttpInterceptorService, public http: Http, store: Store<AppState>) {
     httpInterceptor.request().addInterceptor((data, method) => {
       console.debug("请求拦截：", data);
-      const url = data[0];
-      if(method.toLowerCase()==='get'){
-
-      }else if(method.toLowerCase()==='post'){
-
+      const url: string = data[0];
+      const headers = getHttpHeadersOrInit(data, method);
+      const user$ = store.select(fromUser.getLoginUser);
+      if (url.includes('/api')) {
+        user$.do(user=>console.debug('tokenId',user!.token)).subscribe(user => headers.set('tokenId', user!.token));
       }
       return data;
     });
