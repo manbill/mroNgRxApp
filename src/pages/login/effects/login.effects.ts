@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import * as LoginActions from "../actions/login.actions";
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
+import * as AppActions from "../../../app/actions/app.actions";
 
 @Injectable()
 export class LoginEffects {
@@ -17,7 +18,7 @@ export class LoginEffects {
         .map(res => new LoginActions.LoginSuccess(res['data']))
         .catch(e => {
           console.error(e);
-          return Observable.of(new LoginActions.LoginFailure(e));
+          return Observable.of(new AppActions.AppThrowsError(e));
         })
     })
 }
