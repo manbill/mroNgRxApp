@@ -1,3 +1,4 @@
+import { MroError } from './../../../app/mro-error-handler';
 import { Http } from '@angular/http';
 import { MroHttpWithApis } from './../../../providers/api/mro.http-apis';
 import { Effect, Actions } from "@ngrx/effects";
@@ -12,6 +13,7 @@ export class LoginEffects {
   constructor(private action$: Actions, private httpApi: MroHttpWithApis) { }
   @Effect()
   login$ = this.action$.ofType(LoginActions.LOGIN)
+    .do(() => console.log('login effects'))
     .switchMap((action: LoginActions.Login) => {
       return this.httpApi.http.post(this.httpApi.apis.loginApi, action.payload)
         .do(res => console.log(res))

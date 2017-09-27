@@ -27,7 +27,7 @@ import * as moment from "moment/moment";
 export class InstructorEffects {
   constructor(private action$: Actions, private httpApi: MroHttpWithApis, private db: Db) { }
   @Effect()
-  fetchInstructors$ = this.action$.ofType(InstructorActions.FETCH_INSTRUCTOR_DATA, LOGIN_SUCCESS)
+  fetchInstructors$ = this.action$.ofType(InstructorActions.FETCH_INSTRUCTOR_DATA/* , LOGIN_SUCCESS */)
     .switchMap(() => {
       return this.db.executeSql(`select * from ${tableNames.eam_sync_actions} where syncAction=?`, [InstructorActions.FETCH_INSTRUCTOR_DATA])
         .map(res => MroUtils.changeDbResult2Array(res))

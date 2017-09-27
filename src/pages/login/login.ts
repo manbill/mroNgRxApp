@@ -33,6 +33,7 @@ export class LoginPage {
   }
   login() {
     if (this.loginForm.valid) {
+      console.log(this.store)
       this.store.dispatch(new LoginActions.Login(
         {
           deviceFlag: this.plt.is('ios') ? 1 : 2,

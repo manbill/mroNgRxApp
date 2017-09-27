@@ -14,7 +14,7 @@ import * as AppActions from "../../../app/actions/app.actions";
 export class DictionaryEffects {
   constructor(private action$: Actions, private httpApi: MroHttpWithApis, private db: Db) { }
   @Effect()
-  fetchDict$ = this.action$.ofType(DictionaryActions.FETCH_DICTIONARY_DATA, LOGIN_SUCCESS)
+  fetchDict$ = this.action$.ofType(DictionaryActions.FETCH_DICTIONARY_DATA/* , LOGIN_SUCCESS */)
     .switchMap(() => {
       return this.db.executeSql(`select * from ${tableNames.eam_sync_actions} where syncAction=?`, [DictionaryActions.FETCH_DICTIONARY_DATA])
         .map(r => MroUtils.changeDbResult2Array(r))

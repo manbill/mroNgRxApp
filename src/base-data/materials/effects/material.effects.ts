@@ -16,7 +16,7 @@ import * as AppActions from "../../../app/actions/app.actions";
 export class MaterialEffects {
   constructor(private db: Db, private httpApi: MroHttpWithApis, private action$: Actions) { }
   @Effect()
-  fetchMaterial$ = this.action$.ofType(MaterialActions.FETCH_MATERIALS_DATA, LOGIN_SUCCESS)
+  fetchMaterial$ = this.action$.ofType(MaterialActions.FETCH_MATERIALS_DATA/* , LOGIN_SUCCESS */)
     .switchMap(() => {
       return this.db.executeSql(`select * from ${tableNames.eam_sync_actions} where syncAction=?`, [MaterialActions.FETCH_MATERIALS_DATA])
         .map(res => {

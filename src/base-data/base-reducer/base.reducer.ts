@@ -1,5 +1,6 @@
 import * as fromDictionary from "../dictionary/reducer/dictionary.reducer";
 import * as fromInstructor from "../manual-instrutors/reducer/intructor.reducer";
+import * as fromMaterial from "../materials/reducers/index";
 import { ActionReducerMap, createFeatureSelector, createSelector } from '@ngrx/store';
 export interface BaseDataState {
   manualInstructor: fromInstructor.InstructorState;
@@ -7,7 +8,7 @@ export interface BaseDataState {
 }
 export const reducers: ActionReducerMap<BaseDataState> = {
   dictionary: fromDictionary.reducer,
-  manualInstructor: fromInstructor.reducer
+  manualInstructor: fromInstructor.reducer,
 }
 export const getBaseDataFeatureState = createFeatureSelector<BaseDataState>('baseData');
 //---------------------------------------dictionary-------------------------------------------
