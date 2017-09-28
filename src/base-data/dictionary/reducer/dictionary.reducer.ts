@@ -12,7 +12,7 @@ export const initState: DictionaryState = {
   entitites: {},
   pending: false
 }
-export function reducer(state: DictionaryState = initState, action: any): DictionaryState {
+export function reducer(state: DictionaryState = initState, action: DictionaryActions.All): DictionaryState {
   switch (action.type) {
     default:
       return state;

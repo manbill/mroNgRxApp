@@ -1,6 +1,6 @@
 import { Material } from './../../../modals/material/material.modal';
 import * as MaterialActions from "../actions/material.actions";
-export interface State {
+export interface MaterialState {
   selectedId: number;
   ids: number[];
   entities: {
@@ -8,13 +8,13 @@ export interface State {
   }
   pending: boolean;
 }
-export const initState: State = {
+export const initState: MaterialState = {
   ids: [],
   selectedId: null,
   entities: {},
   pending: false
 }
-export function reducer(state: State = initState, action: MaterialActions.All): State {
+export function reducer(state: MaterialState = initState, action: MaterialActions.All): MaterialState {
   switch (action.type) {
     default:
       return state;
@@ -41,3 +41,7 @@ export function reducer(state: State = initState, action: MaterialActions.All): 
     }
   }
 }
+export const getSelectedMaterialId = (state: MaterialState) => state.selectedId;
+export const getMaterialIds = (state: MaterialState) => state.ids;
+export const getMaterialEntities = (state: MaterialState) => state.entities;
+export const getMaterialPendingStatus = (state: MaterialState) => state.pending;
