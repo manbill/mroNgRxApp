@@ -42,5 +42,6 @@ export enum MroErrorCode{
   response_error_code,
   instructor_error_code,
   dictionary_error_code,
-  materials_error_code
+  materials_error_code,
+  warehouse_error_code,
 }

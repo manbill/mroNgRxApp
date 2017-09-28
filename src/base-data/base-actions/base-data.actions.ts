@@ -1,6 +1,7 @@
 import * as DictActions from '../dictionary/actions/dictionary.actions';
 import * as IntructorActions from "../manual-instrutors/actions/instructor.actions";
 import * as MaterialActions from "../materials/actions/material.actions";
+import * as WarehouseActions from "../warehouse/actions/warehouse.actions";
 import { IFetchDataAction } from '../../shared/common';
 export const BaseDataFetchActions: IFetchDataAction[] = [
   {
@@ -11,5 +12,8 @@ export const BaseDataFetchActions: IFetchDataAction[] = [
   },
   {
     syncAction: MaterialActions.FETCH_MATERIALS_DATA
+  },
+  {
+    syncAction: WarehouseActions.FETCH_WAREHOUSE_DATA
   }
 ]
