@@ -1,5 +1,6 @@
 import { Material } from './../../../modals/material/material.modal';
 import * as MaterialActions from "../actions/material.actions";
+import { createSelector } from '@ngrx/store';
 export interface MaterialState {
   selectedId: number;
   ids: number[];
@@ -22,6 +23,12 @@ export function reducer(state: MaterialState = initState, action: MaterialAction
       return {
         ...state,
         pending: true
+      }
+    }
+    case MaterialActions.SELECT_MATERIAL: {
+      return {
+        ...state,
+        selectedId: (<MaterialActions.SelectMaterial>action).payload.materialId
       }
     }
     case MaterialActions.FETCH_MATERIALS_DATA_SUCCESS: {
