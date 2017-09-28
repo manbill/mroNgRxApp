@@ -5,6 +5,8 @@ import { AppState } from '../../app/reducers/app.reducer';
 import { Store } from '@ngrx/store';
 import * as LoginActions from "../login/actions/login.actions";
 import { Login } from './actions/login.actions';
+import * as fromUser from "../../user/reducer/user.reducer";
+import { SelectProjectPage } from '../select-project/select-project';
 /**
  * Generated class for the LoginPage page.
  *
@@ -40,7 +42,14 @@ export class LoginPage {
           userName: this.loginForm.get('userName').value,
           password: this.loginForm.get('password').value
         }
-      ))
+      ));
+      const subscribe = this.store.select(fromUser.getProjects).subscribe(projects => {
+        console.log(projects)
+        if (projects.length > 0) {
+          this.navCtrl.push(SelectProjectPage);
+          subscribe.unsubscribe();
+        }
+      });
     }
   }
 }

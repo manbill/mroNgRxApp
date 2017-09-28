@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { LoginPage } from './login';
 import { reducer } from "./reducer/login.reducer";
+import { SelectProjectPageModule } from "../select-project/select-project.module";
 
 @NgModule({
   declarations: [
@@ -12,13 +13,14 @@ import { reducer } from "./reducer/login.reducer";
   ],
   imports: [
     IonicPageModule.forChild(LoginPage),
-    EffectsModule.forFeature([LoginEffects])
+    EffectsModule.forFeature([LoginEffects]),
+    SelectProjectPageModule
   ],
-  providers:[
+  providers: [
 
   ],
-  entryComponents:[
+  entryComponents: [
     LoginPage,
   ]
 })
-export class LoginPageModule {}
+export class LoginPageModule { }

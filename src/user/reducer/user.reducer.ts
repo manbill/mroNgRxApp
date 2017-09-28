@@ -32,8 +32,8 @@ export const getProjectState = createSelector(getUserFeatureState, getProjectFea
 export const getProjectEntities = createSelector(getProjectState, fromProject.getProjectEntities);
 export const getProjectPendingStatus = createSelector(getProjectState, fromProject.getProjectPendingStatus);
 export const getProjectIds = createSelector(getProjectState, fromProject.getProjectIds);
-export const getProjects = createSelector(getProjectState, fromProject.getProjects);
 export const getSelectedProjectId = createSelector(getProjectState, fromProject.getSelectedProjectId);
+export const getProjects = createSelector(getProjectIds, getProjectEntities,(ids,entities)=>ids.map(id=>entities[id]));
 //======================================project====================================
 
 //--------------------------------------company-------------------------------------------------

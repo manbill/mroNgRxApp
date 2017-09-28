@@ -11,6 +11,8 @@ import * as BaseDataActions from "../../base-data/base-actions/base-data.actions
 import * as BusinessDataActions from "../../business-data/business-actions/business.actions";
 import { tableNames } from '../../providers/db/mro.tables';
 import { MroUtils } from '../../shared/utils';
+import * as fromUser from "../../user/reducer/user.reducer";
+import * as fromBaseData from "../../base-data/base-reducer/base.reducer";
 @Injectable()
 export class AppEffects {
   constructor(private db: Db, private action$: Actions, private alertCtrl: AlertController) { }
@@ -18,6 +20,27 @@ export class AppEffects {
   initTables$ = this.action$.ofType(AppActions.INIT_MRO_TABLES)
     .switchMap(
     () => this.db.initSqlVersions()
+      .switchMap(() => {
+        return this.db.executeSql(`select * from ${tableNames.eam_sync_base_data_state}`)
+          .map(res => MroUtils.changeDbResult2Array(res))
+          .switchMap((baseStateRecords) => {
+            return this.db.executeSql(`select * from ${tableNames.eam_user}`)
+              .map(res => MroUtils.changeDbResult2Array(res))
+          }, (baseStateRecords, userStateRecords) => ({ baseStateRecords, userStateRecords }))
+      })
+      .switchMap(({ baseStateRecords, userStateRecords }) => {
+        const sqls = [];
+        const initUserState = fromUser.initState;
+        const initBaseDataState=fromBaseData.initBaseDataState;
+        const insertUserStateSql=`insert into ${}`;
+        const insertBaseStateSql=`insert into ${}`;
+        if (baseStateRecords.length===0){
+
+        }else{
+
+        }
+        return this.db.sqlBatch(sqls);
+      })
       .switchMap(() => {
         return this.db.executeSql(`select * from ${tableNames.eam_sync_actions}`)
           .map(res => MroUtils.changeDbResult2Array(res))

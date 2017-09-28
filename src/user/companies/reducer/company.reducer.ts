@@ -1,6 +1,7 @@
 import { Company } from '../../../modals/company/company.modal';
 import * as CompanyActions from "../actions/company.actions";
 import { createSelector } from '@ngrx/store';
+import { SelectCompany } from '../actions/company.actions';
 export interface CompanyState {
   selectedCompanyId: number;
   ids: number[];
@@ -26,6 +27,14 @@ export function reducer(state: CompanyState = initState, action: CompanyActions.
         pending: false,
         ids: companies.map(c => c.companyId),
         entities: companies.reduce((e, c) => { e[c.companyId] = c; return e; }, {}),
+      }
+    }
+    case CompanyActions.SELECT_COMPANIE: {
+      const company = (<CompanyActions.SelectCompany>action).payload;
+      return {
+        ...state,
+        pending: false,
+        selectedCompanyId: company.companyId
       }
     }
     case CompanyActions.FETCH_USER_COMPANIES_FAILED: {

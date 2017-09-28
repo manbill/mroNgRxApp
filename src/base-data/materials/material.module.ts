@@ -6,7 +6,6 @@ import { NgModule } from '@angular/core';
 @NgModule({
   imports:[
     EffectsModule.forFeature([MaterialEffects]),
-    StoreModule.forFeature('baseData.material',fromMaterial.reducer)
   ]
 })
 export class MaterialModule{

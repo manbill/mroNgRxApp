@@ -7,6 +7,7 @@ import * as LoginActions from "../actions/login.actions";
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
 import * as AppActions from "../../../app/actions/app.actions";
+import { NavController } from 'ionic-angular';
 
 @Injectable()
 export class LoginEffects {

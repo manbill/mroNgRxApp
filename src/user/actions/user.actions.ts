@@ -6,7 +6,6 @@ export class InitUser implements Action {
   readonly type = INIT_USER_STATE;
   constructor(public payload: UserState) { }
 }
-
 export type Actions =
   InitUser
 

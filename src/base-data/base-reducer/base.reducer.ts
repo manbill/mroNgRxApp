@@ -9,6 +9,12 @@ export interface BaseDataState {
   material: fromMaterial.MaterialState;
   warehouse: fromWarehouse.WarehouseState;
 }
+export const initBaseDataState: BaseDataState = {
+  manualInstructor: fromInstructor.initState,
+  dictionary: fromDictionary.initState,
+  material: fromMaterial.initState,
+  warehouse: fromWarehouse.initState
+}
 export const reducers: ActionReducerMap<BaseDataState> = {
   dictionary: fromDictionary.reducer,
   manualInstructor: fromInstructor.reducer,
