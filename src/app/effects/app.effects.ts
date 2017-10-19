@@ -6,6 +6,7 @@ import { Actions, Effect } from "@ngrx/effects";
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { AlertController } from 'ionic-angular';
 import * as BaseDataActions from "../../base-data/base-actions/base-data.actions";
@@ -38,14 +39,23 @@ export class AppEffects {
         Object.keys(BaseDataActions.BaseStateTypesInitInfos)
           .map(type => BaseDataActions.BaseStateTypesInitInfos[type])
           //仅过滤数据库中尚未记录的需要初始化的状态
-          .filter(({ type }) => !baseStateRecords.some(r => r.type !== type))
+          .filter(({ type }) => {
+            // console.log(type);
+            return !baseStateRecords.some(r => r.type !== type);
+          })
           .map(({ type, initAction }) => {
             sqls.push([insertBaseStateSql, [type, JSON.stringify(initAction.payload), initAction.actionName]]);
           });
         if (userStateRecords.length === 0) {
-          const userId = fromUser.getLoginUser(this.store).id;
+          let store=null;
+          this.store.subscribe(s=>store=s,console.error);
+          const user = fromUser.getLoginUser(store);
+          console.log(user);
+          const userId = user ? user.id : null;
           console.log("fromUser.getLoginUser(this.store).id", userId);
-          sqls.push([insertUserStateSql, [JSON.stringify(initUserState), userId]]);
+          if (userId) {
+            sqls.push([insertUserStateSql, [JSON.stringify(initUserState), userId]]);
+          }
         }
         return this.db.sqlBatch(sqls);
       })
