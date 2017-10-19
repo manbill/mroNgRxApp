@@ -95,6 +95,7 @@ export class WarehouseEffects {
             })
         })
         .switchMap(() => this.db.executeSql(`select * from ${tableNames.eam_sync_warehouse} limit 0,${LOAD_PAGENATION}`))
+        .map(MroUtils.changeDbResult2Array)
         .map((res) => new WarehouseActions.FetchWarehouseDataSuccess(res))
         .catch(e => {
           console.error(e);

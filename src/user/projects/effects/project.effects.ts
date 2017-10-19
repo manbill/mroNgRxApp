@@ -14,7 +14,7 @@ import * as fromUser from "../../reducer/user.reducer";
 export class ProjectEffects {
   constructor(private httpApi: MroHttpWithApis, private action$: Actions, private db: Db, private store: Store<AppState>) { }
   @Effect()
-  fetchProjects$ = this.action$.ofType(ProjectActions.FETCH_USER_PROJECTS, LoginActions.LOGIN_SUCCESS)
+  fetchProjects$ = this.action$.ofType(ProjectActions.FETCH_USER_PROJECTS,LoginActions.LOGIN_SUCCESS)
     .switchMap(() => {
       return this.httpApi.http.post(this.httpApi.apis.fetchProjectsApi, {})
         .map((res: MroResponse) => new ProjectActions.FetchProjectsSuccess(res.data))

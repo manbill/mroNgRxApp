@@ -24,7 +24,8 @@ export function reducer(state: LoginState = initState, action: LoginActions.Acti
     case LoginActions.LOGIN_FAILURE: {
       return {
         ...state,
-        loggedIn: false
+        loggedIn: false,
+        user:null
       }
     }
   }

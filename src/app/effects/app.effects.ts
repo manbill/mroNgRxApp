@@ -19,7 +19,7 @@ import { Store } from '@ngrx/store';
 @Injectable()
 export class AppEffects {
   constructor(private db: Db, private action$: Actions, private store: Store<fromRoot.AppState>, private alertCtrl: AlertController) { }
-  @Effect({ dispatch: false })
+  @Effect()
   initTables$ = this.action$.ofType(AppActions.INIT_MRO_TABLES)
     .switchMap(
     () => this.db.initSqlVersions()

@@ -27,16 +27,17 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
-      this.nav.setRoot(LoginPage);
       this.login$ = this.store.select(fromUser.getLoggedIn);
       // console.log(this.store);
       const subscription = this.login$.subscribe(loggedIn => {
-        console.log(loggedIn);
+        console.log("之前是否已经登录成功过?: "+loggedIn);
         if (!loggedIn) {
           this.nav.setRoot(LoginPage);
           // subscription.unsubscribe();
+        }else{
+          this.nav.setRoot(TabsPage);
         }
-      })
+      });
       this.store.dispatch(new AppActions.InitTables('initTables'));//初始化数据库表格
     });
   }

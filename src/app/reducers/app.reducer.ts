@@ -13,9 +13,18 @@ export interface AppErrorState {
 }
 export interface AppState {
   appErrors: AppErrorState;
+  initializing: boolean;
 }
 export const RootReducers: ActionReducerMap<AppState> = {
-  appErrors: appErrorsReducer
+  appErrors: appErrorsReducer,
+  initializing: InitializeReducer
+}
+export function InitializeReducer(state: boolean = false, action: AppActions.Actions) {
+  switch (action.type) {
+    default:
+      return state;
+
+  }
 }
 export function appErrorsReducer(state: AppErrorState = {
   errorCodes: [],
