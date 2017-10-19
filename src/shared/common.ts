@@ -3,9 +3,12 @@ export interface IFetchDataAction {
   syncAction: string;
 }
 export const LOAD_PAGENATION = 10;//数据库获取的item数目
-export type Type2InitialActionName<S> = {
+export type Type2InitialAction<S> = {
   [t in keyof S]: {
     type: t;
-    initActionName: string;
+    initAction: {
+      actionName: string;
+      payload: S[t];
+    };
   }
 }

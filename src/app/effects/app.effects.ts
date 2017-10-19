@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Db } from '../../providers/db/db';
 import * as AppActions from "../actions/app.actions";
+import * as fromRoot from "../reducers/app.reducer";
 import { Actions, Effect } from "@ngrx/effects";
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/catch';
@@ -13,9 +14,10 @@ import { tableNames } from '../../providers/db/mro.tables';
 import { MroUtils } from '../../shared/utils';
 import * as fromUser from "../../user/reducer/user.reducer";
 import * as fromBaseData from "../../base-data/base-reducer/base.reducer";
+import { Store } from '@ngrx/store';
 @Injectable()
 export class AppEffects {
-  constructor(private db: Db, private action$: Actions, private alertCtrl: AlertController) { }
+  constructor(private db: Db, private action$: Actions, private store: Store<fromRoot.AppState>, private alertCtrl: AlertController) { }
   @Effect({ dispatch: false })
   initTables$ = this.action$.ofType(AppActions.INIT_MRO_TABLES)
     .switchMap(
@@ -31,13 +33,19 @@ export class AppEffects {
       .switchMap(({ baseStateRecords, userStateRecords }) => {
         const sqls = [];
         const initUserState = fromUser.initState;
-        const initBaseDataState=fromBaseData.initBaseDataState;
-        const insertUserStateSql=`insert into ${}`;
-        const insertBaseStateSql=`insert into ${}`;
-        if (baseStateRecords.length===0){
-
-        }else{
-
+        const insertUserStateSql = `insert into ${tableNames.eam_user}(userStateJson,userId)values(?,?)`;
+        const insertBaseStateSql = `insert into ${tableNames.eam_sync_base_data_state}(type,stateJson,initActionName)values(?,?,?)`;
+        Object.keys(BaseDataActions.BaseStateTypesInitInfos)
+          .map(type => BaseDataActions.BaseStateTypesInitInfos[type])
+          //仅过滤数据库中尚未记录的需要初始化的状态
+          .filter(({ type }) => !baseStateRecords.some(r => r.type !== type))
+          .map(({ type, initAction }) => {
+            sqls.push([insertBaseStateSql, [type, JSON.stringify(initAction.payload), initAction.actionName]]);
+          });
+        if (userStateRecords.length === 0) {
+          const userId = fromUser.getLoginUser(this.store).id;
+          console.log("fromUser.getLoginUser(this.store).id", userId);
+          sqls.push([insertUserStateSql, [JSON.stringify(initUserState), userId]]);
         }
         return this.db.sqlBatch(sqls);
       })
@@ -45,10 +53,10 @@ export class AppEffects {
         return this.db.executeSql(`select * from ${tableNames.eam_sync_actions}`)
           .map(res => MroUtils.changeDbResult2Array(res))
       })
-      .switchMap((records) => {
+      .switchMap((records) => {//获取数据的所有actions，包括基础数据和业务数据
         const syncActions = BaseDataActions.BaseDataFetchActions.concat(BusinessDataActions.BusinessDataFetchActions).filter(a => MroUtils.isNotEmpty(a.syncAction));
         const sqls = [];
-        syncActions.filter(a => {
+        syncActions.filter(a => {//过滤所有尚未记录在数据库中的actions，即初始化后续开发过程中，需要逐渐添加的下载数据的action到数据eam_sync_actions表格中，并且同步的时间和状态分别记录为0,0
           return !records.some((r => r['syncAction'] === a.syncAction))
         })
           .forEach(a => {

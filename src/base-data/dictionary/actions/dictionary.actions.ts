@@ -4,6 +4,11 @@ import { MroError } from '../../../app/mro-error-handler';
 export const FETCH_DICTIONARY_DATA = '[Dictionary] fetch_dictionary_data';
 export const FETCH_DICTIONARY_DATA_FAILED = '[Dictionary] fetch_dictionary_data_failed';
 export const FETCH_DICTIONARY_DATA_SUCCESS = '[Dictionary] fetch_dictionary_data_success';
+export const INIT_DICTIONARY_STATE = '[Dictionary] init_dictionary_state';
+export class InitDictionaryState implements Action {
+  readonly type = INIT_DICTIONARY_STATE;
+  constructor(public payload?: any) { };
+}
 export class FetchDictionaryData implements Action {
   readonly type = FETCH_DICTIONARY_DATA;
   constructor(public payload?: any) { };

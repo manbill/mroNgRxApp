@@ -5,6 +5,11 @@ export const FETCH_MATERIALS_DATA = '[Material] fetch_materials_data';
 export const FETCH_MATERIALS_DATA_SUCCESS = '[Material] fetch_materials_data_success';
 export const FETCH_MATERIALS_DATA_FAILED = '[Material] fetch_materials_data_failed';
 export const SELECT_MATERIAL = '[Material] select_material';
+export const INIT_MATERIAL_STATE = '[Material] Init_Material_State';
+export class InitMaterialState implements Action {
+  readonly type = INIT_MATERIAL_STATE;
+  constructor(public payload: any) { };
+}
 export class FetchMaterialsData implements Action {
   readonly type = FETCH_MATERIALS_DATA;
   constructor(public payload: any) { };

@@ -5,6 +5,11 @@ export const FETCH_WAREHOUSE_DATA = '[Warehouse] fetch_warehouse_data';
 export const SELECT_WAREHOUSE = '[Warehouse] SELECT_WAREHOUSE';
 export const FETCH_WAREHOUSE_DATA_SUCCESS = '[Warehouse] fetch_warehouse_data_success';
 export const FETCH_WAREHOUSE_DATA_FAILED = '[Warehouse] fetch_warehouse_data_failed';
+export const INIT_WAREHOUSE_STATE = '[Warehouse] Init_Warehouse_State';
+export class InitWarehouseState implements Action {
+  readonly type = INIT_WAREHOUSE_STATE;
+  constructor(public payload: Warehouse) { };
+}
 export class SelectWarehouse implements Action {
   readonly type = SELECT_WAREHOUSE;
   constructor(public payload: Warehouse) { };
