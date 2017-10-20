@@ -23,7 +23,10 @@ export function InitializeReducer(state: boolean = false, action: AppActions.Act
   switch (action.type) {
     default:
       return state;
-
+    case AppActions.APP_INITIALIZING:
+      return true;
+    case AppActions.APP_INITIALIZIED:
+      return false;
   }
 }
 export function appErrorsReducer(state: AppErrorState = {

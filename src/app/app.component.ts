@@ -13,6 +13,7 @@ import * as fromUser from "../user/reducer/user.reducer";
 import { Observable } from 'rxjs/Observable';
 import { LoginPage } from '../pages/login/login';
 import { getLoggedIn } from '../user/reducer/user.reducer';
+
 @Component({
   templateUrl: 'app.html'
 })
